@@ -12,6 +12,8 @@ gem 'sqlite3', '~> 1.4'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
+gem 'rubocop-rails', require: false
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
@@ -30,9 +32,9 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'database_cleaner-active_record'
   gem 'rails-controller-testing'
-  gem 'simplecov', require: false
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
+  gem 'simplecov', require: false
   gem 'webdrivers'
 end
 
