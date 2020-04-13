@@ -14,6 +14,9 @@ gem 'webpacker', '~> 4.0'
 
 gem 'rubocop-rails', require: false
 
+gem 'faraday'
+gem 'oj'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'dotenv-rails'
