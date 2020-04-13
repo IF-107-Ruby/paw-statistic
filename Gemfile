@@ -16,6 +16,7 @@ gem 'rubocop-rails', require: false
 
 gem 'faraday'
 gem 'oj'
+gem 'slim-rails'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
