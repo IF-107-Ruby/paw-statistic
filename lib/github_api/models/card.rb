@@ -1,11 +1,11 @@
 module GithubApi
   module Models
     class Card
-      attr_reader :id, :note, :archived
+      attr_reader :card_id, :note, :archived
 
       def initialize(json:)
         @json = json
-        @id = json['id']
+        @card_id = json['id']
         @note = json['note']
         @archived = json['archived']
       end
@@ -16,6 +16,10 @@ module GithubApi
         else
           @json['creator']
         end
+      end
+
+      def as_json
+        { card_id: card_id, note: note, archived: archived }
       end
     end
   end

@@ -1,14 +1,15 @@
 module GithubApi
   module Models
     class Project
-      attr_reader :id, :name, :body, :state
+      attr_reader :project_id, :name, :body, :state, :number
 
       def initialize(json:)
         @json = json
-        @id = json['id']
+        @project_id = json['id']
         @name = json['name']
         @body = json['body']
         @state = json['state']
+        @number = json['number']
       end
 
       def columns
@@ -19,11 +20,12 @@ module GithubApi
       end
 
       def creator
-        if @json['creator']['type'] == 'User'
-          @creator ||= User.new json: @json['creator']
-        else
-          @json['creator']
-        end
+        @creator ||= User.new json: @json['creator']
+      end
+
+      def as_json
+        { project_id: project_id, name: name,
+          body: body, state: state, number: number }
       end
     end
   end
