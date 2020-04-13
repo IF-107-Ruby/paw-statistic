@@ -15,7 +15,6 @@ gem 'webpacker', '~> 4.0'
 gem 'rubocop-rails', require: false
 
 gem 'bootstrap', '~> 4.4.1'
-gem 'jquery-rails'
 
 gem 'faraday'
 gem 'oj'
