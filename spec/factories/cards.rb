@@ -3,6 +3,6 @@ FactoryBot.define do
     card_id { Faker::Number.number(digits: 6) }
     column {  create(:column) }
     note { Faker::Lorem.sentence }
-    creator { create(:user) }
+    user { create(:user) }
   end
 end

@@ -1,0 +1,22 @@
+.project-columns {
+  overflow-x: auto;
+  height: 95%;
+}
+
+@media (min-width: 544px) {
+  .project-column {
+    border-width: 1px !important;
+    border-radius: 6px !important;
+  }
+}
+@media (min-width: 576px) {
+  .project-column {
+    min-width: 355px !important;
+    max-width: 355px !important;
+  }
+}
+
+.project-column {
+  min-width: 100%;
+  background-color: #eff1f3;
+}

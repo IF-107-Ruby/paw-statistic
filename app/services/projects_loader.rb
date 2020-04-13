@@ -5,7 +5,7 @@ class ProjectsLoader
   end
 
   def run
-    projects = GithubApi.client.repo_projects('IF-107-Ruby', 'paw-patrol')
+    projects = GithubApi.client.repo_projects(ENV['GITHUB_LOGIN'], ENV['GITHUB_REPO'])
     update_projects projects
   end
 
@@ -36,18 +36,42 @@ class ProjectsLoader
   end
 
   def find_or_create_user(params)
-    User.find_by(user_id: params[:user_id]) || User.create(params)
+    user = User.find_by(user_id: params[:user_id])
+    if user.nil?
+      user = User.create(params)
+    else
+      user.update(params)
+    end
+    user
   end
 
   def find_or_create_project(params)
-    Project.find_by(project_id: params[:project_id]) || Project.create(params)
+    project = Project.find_by(project_id: params[:project_id])
+    if project.nil?
+      project = Project.create(params)
+    else
+      project.update(params)
+    end
+    project
   end
 
   def find_or_create_column(params)
-    Column.find_by(column_id: params[:column_id]) || Column.create(params)
+    column = Column.find_by(column_id: params[:column_id])
+    if column.nil?
+      column = Column.create(params)
+    else
+      column.update(params)
+    end
+    column
   end
 
   def find_or_create_card(params)
-    Card.find_by(card_id: params[:card_id]) || Card.create(params)
+    card = Card.find_by(card_id: params[:card_id])
+    if card.nil?
+      card = Card.create(params)
+    else
+      card.update(params)
+    end
+    card
   end
 end
