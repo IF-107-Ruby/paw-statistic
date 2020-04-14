@@ -29,7 +29,8 @@ module PawStatistics
     config.eager_load_paths << Rails.root.join('lib')
 
     config.after_initialize do
-      unless Rails.env.test?
+      unless Rails.env.test? || ActiveRecord::Base
+             .connection.migration_context.needs_migration?
         loader = ProjectsLoader.new access_token: ENV['ACCESS_TOKEN']
         loader.load
       end
