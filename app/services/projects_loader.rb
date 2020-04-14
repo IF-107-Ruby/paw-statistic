@@ -31,8 +31,15 @@ class ProjectsLoader
   def update_column_cards(column, cards)
     cards.each do |card|
       card_creator = find_or_create_user card.creator.as_json
-      find_or_create_card card.as_json.merge({ column: column, user: card_creator })
+      issue = get_card_content card unless card.content.nil?
+      find_or_create_card card.as_json.merge({ column: column,
+                                               user: card_creator, issue: issue })
     end
+  end
+
+  def get_card_content(card)
+    issue_opener = find_or_create_user card.content.user.as_json
+    find_or_create_issue card.content.as_json.merge({ user: issue_opener })
   end
 
   def find_or_create_user(params)
@@ -53,6 +60,16 @@ class ProjectsLoader
       project.update(params)
     end
     project
+  end
+
+  def find_or_create_issue(params)
+    issue = Issue.find_by(issue_id: params[:issue_id])
+    if issue.nil?
+      issue = Issue.create(params)
+    else
+      issue.update(params)
+    end
+    issue
   end
 
   def find_or_create_column(params)

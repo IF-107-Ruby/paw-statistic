@@ -11,11 +11,17 @@ module GithubApi
       end
 
       def creator
-        if @json['creator']['type'] == 'User'
-          @creator ||= User.new json: @json['creator']
-        else
-          @json['creator']
+        @creator ||= User.new json: @json['creator']
+      end
+
+      def content
+        unless @json['content_url'].nil?
+          @content ||= Issue.new json: GithubApi.client.request(
+            http_method: :get,
+            endpoint: @json['content_url']
+          )
         end
+        @content
       end
 
       def as_json

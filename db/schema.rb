@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_200_413_093_249) do
+ActiveRecord::Schema.define(version: 20_200_414_101_259) do
   create_table 'cards', force: :cascade do |t|
     t.integer 'card_id', null: false
     t.integer 'column_id', null: false
@@ -19,8 +19,10 @@ ActiveRecord::Schema.define(version: 20_200_413_093_249) do
     t.boolean 'archived', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.integer 'issue_id'
     t.index ['card_id'], name: 'index_cards_on_card_id', unique: true
     t.index ['column_id'], name: 'index_cards_on_column_id'
+    t.index ['issue_id'], name: 'index_cards_on_issue_id'
     t.index ['user_id'], name: 'index_cards_on_user_id'
   end
 
@@ -32,6 +34,19 @@ ActiveRecord::Schema.define(version: 20_200_413_093_249) do
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['column_id'], name: 'index_columns_on_column_id', unique: true
     t.index ['project_id'], name: 'index_columns_on_project_id'
+  end
+
+  create_table 'issues', force: :cascade do |t|
+    t.integer 'issue_id'
+    t.string 'title'
+    t.integer 'user_id'
+    t.string 'state'
+    t.boolean 'locked'
+    t.integer 'number'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['issue_id'], name: 'index_issues_on_issue_id', unique: true
+    t.index ['user_id'], name: 'index_issues_on_user_id'
   end
 
   create_table 'projects', force: :cascade do |t|
@@ -57,7 +72,9 @@ ActiveRecord::Schema.define(version: 20_200_413_093_249) do
   end
 
   add_foreign_key 'cards', 'columns'
+  add_foreign_key 'cards', 'issues'
   add_foreign_key 'cards', 'users'
   add_foreign_key 'columns', 'projects'
+  add_foreign_key 'issues', 'users'
   add_foreign_key 'projects', 'users'
 end
