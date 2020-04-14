@@ -19,10 +19,22 @@ require 'sprockets/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv::Railtie.load
+
 module PawStatistics
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+
+    config.eager_load_paths << Rails.root.join('lib')
+
+    config.after_initialize do
+      unless Rails.env.test? || ActiveRecord::Base
+             .connection.migration_context.needs_migration?
+        loader = ProjectsLoader.new access_token: ENV['ACCESS_TOKEN']
+        loader.load
+      end
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -31,5 +43,6 @@ module PawStatistics
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.generators.template_engine :slim
   end
 end

@@ -14,8 +14,15 @@ gem 'webpacker', '~> 4.0'
 
 gem 'rubocop-rails', require: false
 
+gem 'bootstrap', '~> 4.4.1'
+
+gem 'faraday'
+gem 'oj'
+gem 'slim-rails'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'faker',       git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'rspec-rails', '~> 4.0'
