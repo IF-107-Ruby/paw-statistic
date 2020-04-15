@@ -16,6 +16,16 @@ module GithubApi
         ).map { |raw_json| Card.new json: raw_json }
       end
 
+      def project
+        unless @json['project_url'].nil?
+          @project ||= Project.new json: GithubApi.client.request(
+            http_method: :get,
+            endpoint: @json['project_url']
+          )
+        end
+        @project
+      end
+
       def as_json
         { column_id: column_id, name: name }
       end

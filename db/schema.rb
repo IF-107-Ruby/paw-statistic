@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_200_414_101_259) do
+ActiveRecord::Schema.define(version: 20_200_415_173_515) do
+  create_table 'card_moves', force: :cascade do |t|
+    t.integer 'from_id'
+    t.integer 'to_id'
+    t.integer 'user_id', null: false
+    t.integer 'card_id', null: false
+    t.datetime 'moved_at'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index '"card"', name: 'index_card_moves_on_card'
+    t.index ['card_id'], name: 'index_card_moves_on_card_id'
+    t.index ['user_id'], name: 'index_card_moves_on_user_id'
+  end
+
   create_table 'cards', force: :cascade do |t|
     t.integer 'card_id', null: false
     t.integer 'column_id', null: false
@@ -20,6 +33,7 @@ ActiveRecord::Schema.define(version: 20_200_414_101_259) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.integer 'issue_id'
+    t.integer 'last_move_id'
     t.index ['card_id'], name: 'index_cards_on_card_id', unique: true
     t.index ['column_id'], name: 'index_cards_on_column_id'
     t.index ['issue_id'], name: 'index_cards_on_issue_id'
@@ -71,6 +85,11 @@ ActiveRecord::Schema.define(version: 20_200_414_101_259) do
     t.index ['user_id'], name: 'index_users_on_user_id'
   end
 
+  add_foreign_key 'card_moves', 'cards'
+  add_foreign_key 'card_moves', 'columns', column: 'from_id'
+  add_foreign_key 'card_moves', 'columns', column: 'to_id'
+  add_foreign_key 'card_moves', 'users'
+  add_foreign_key 'cards', 'card_moves', column: 'last_move_id'
   add_foreign_key 'cards', 'columns'
   add_foreign_key 'cards', 'issues'
   add_foreign_key 'cards', 'users'

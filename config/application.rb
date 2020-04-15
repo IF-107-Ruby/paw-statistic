@@ -31,7 +31,8 @@ module PawStatistics
     config.after_initialize do
       unless Rails.env.test? || ActiveRecord::Base
              .connection.migration_context.needs_migration?
-        loader = ProjectsLoader.new access_token: ENV['ACCESS_TOKEN']
+        GithubApi.client = GithubApi::Client.new ENV['ACCESS_TOKEN']
+        loader = ProjectsLoader.new
         loader.load
       end
     end

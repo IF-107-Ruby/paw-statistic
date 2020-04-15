@@ -1,12 +1,6 @@
 .card.mb-2
   .card-body.p-3
-    - if card.issue
       .text-body.mb-2
-        = card.issue.title
+        = card_title card
       .text-dark.small
-        = "Opened by #{card.issue.user.login}"
-    - else
-      .text-body.mb-2
-        = card.note
-      .text-dark.small
-        = "Added by #{card.user.login}"
+        = card_details card

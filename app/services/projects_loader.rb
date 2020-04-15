@@ -1,9 +1,4 @@
 class ProjectsLoader
-  def initialize(access_token:)
-    @access_token = access_token
-    GithubApi.client = GithubApi::Client.new access_token
-  end
-
   def run
     projects = GithubApi.client.repo_projects(ENV['GITHUB_LOGIN'], ENV['GITHUB_REPO'])
     update_projects projects
