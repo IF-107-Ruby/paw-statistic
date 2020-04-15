@@ -1,15 +1,17 @@
 dist: xenial
+services:
+  - postgresql
 cache:
   bundler: true
   yarn: true
 language: ruby
-global:
-  - RAILS_ENV=test
 install:
   - travis_retry nvm install 13.5.0
   - bundle
   - yarn
 before_script:
+  - cp config/database.yml.travis config/database.yml
+  - rake db:setup
   - RAILS_ENV=test bundle exec rails webpacker:compile
 script:
   - bundle exec rspec

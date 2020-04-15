@@ -11,28 +11,30 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20_200_415_173_515) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension 'plpgsql'
+
   create_table 'card_moves', force: :cascade do |t|
     t.integer 'from_id'
     t.integer 'to_id'
-    t.integer 'user_id', null: false
-    t.integer 'card_id', null: false
+    t.bigint 'user_id', null: false
+    t.bigint 'card_id', null: false
     t.datetime 'moved_at'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index '"card"', name: 'index_card_moves_on_card'
     t.index ['card_id'], name: 'index_card_moves_on_card_id'
     t.index ['user_id'], name: 'index_card_moves_on_user_id'
   end
 
   create_table 'cards', force: :cascade do |t|
     t.integer 'card_id', null: false
-    t.integer 'column_id', null: false
+    t.bigint 'column_id', null: false
     t.string 'note'
-    t.integer 'user_id'
+    t.bigint 'user_id'
     t.boolean 'archived', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.integer 'issue_id'
+    t.bigint 'issue_id'
     t.integer 'last_move_id'
     t.index ['card_id'], name: 'index_cards_on_card_id', unique: true
     t.index ['column_id'], name: 'index_cards_on_column_id'
@@ -42,7 +44,7 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
 
   create_table 'columns', force: :cascade do |t|
     t.integer 'column_id', null: false
-    t.integer 'project_id', null: false
+    t.bigint 'project_id', null: false
     t.string 'name'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
@@ -53,7 +55,7 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
   create_table 'issues', force: :cascade do |t|
     t.integer 'issue_id'
     t.string 'title'
-    t.integer 'user_id'
+    t.bigint 'user_id'
     t.string 'state'
     t.boolean 'locked'
     t.integer 'number'
@@ -65,7 +67,7 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
 
   create_table 'projects', force: :cascade do |t|
     t.integer 'project_id', null: false
-    t.integer 'user_id'
+    t.bigint 'user_id'
     t.string 'name'
     t.string 'body'
     t.integer 'number'
