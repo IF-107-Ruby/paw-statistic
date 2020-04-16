@@ -1,1 +1,5 @@
-= render @projects
+- if @projects.empty?
+  = render 'no_projects'
+- else
+  .m-3
+    = render @projects

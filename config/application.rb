@@ -27,12 +27,15 @@ module PawStatistics
     config.load_defaults 6.0
 
     config.eager_load_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join('/app/concerns')
 
     config.after_initialize do
       unless Rails.env.test? || ActiveRecord::Base
              .connection.migration_context.needs_migration?
-        GithubApi.client = GithubApi::Client.new ENV['ACCESS_TOKEN']
-        loader = ProjectsLoader.new
+        loader = ProjectsLoader.new(
+          github_login: ENV['GITHUB_LOGIN'],
+          github_repo: ENV['GITHUB_REPO']
+        )
         loader.load
       end
     end

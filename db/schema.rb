@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_200_415_173_515) do
+ActiveRecord::Schema.define(version: 20_200_415_210_306) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
   end
 
   create_table 'cards', force: :cascade do |t|
-    t.integer 'card_id', null: false
     t.bigint 'column_id', null: false
     t.string 'note'
     t.bigint 'user_id'
@@ -36,24 +35,26 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
     t.datetime 'updated_at', precision: 6, null: false
     t.bigint 'issue_id'
     t.integer 'last_move_id'
-    t.index ['card_id'], name: 'index_cards_on_card_id', unique: true
+    t.datetime 'updated_on_github_at'
+    t.integer 'github_id'
     t.index ['column_id'], name: 'index_cards_on_column_id'
+    t.index ['github_id'], name: 'index_cards_on_github_id', unique: true
     t.index ['issue_id'], name: 'index_cards_on_issue_id'
     t.index ['user_id'], name: 'index_cards_on_user_id'
   end
 
   create_table 'columns', force: :cascade do |t|
-    t.integer 'column_id', null: false
     t.bigint 'project_id', null: false
     t.string 'name'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['column_id'], name: 'index_columns_on_column_id', unique: true
+    t.datetime 'updated_on_github_at'
+    t.integer 'github_id'
+    t.index ['github_id'], name: 'index_columns_on_github_id', unique: true
     t.index ['project_id'], name: 'index_columns_on_project_id'
   end
 
   create_table 'issues', force: :cascade do |t|
-    t.integer 'issue_id'
     t.string 'title'
     t.bigint 'user_id'
     t.string 'state'
@@ -61,12 +62,13 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
     t.integer 'number'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['issue_id'], name: 'index_issues_on_issue_id', unique: true
+    t.datetime 'updated_on_github_at'
+    t.integer 'github_id'
+    t.index ['github_id'], name: 'index_issues_on_github_id', unique: true
     t.index ['user_id'], name: 'index_issues_on_user_id'
   end
 
   create_table 'projects', force: :cascade do |t|
-    t.integer 'project_id', null: false
     t.bigint 'user_id'
     t.string 'name'
     t.string 'body'
@@ -74,17 +76,20 @@ ActiveRecord::Schema.define(version: 20_200_415_173_515) do
     t.string 'state'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['project_id'], name: 'index_projects_on_project_id', unique: true
+    t.datetime 'updated_on_github_at'
+    t.integer 'github_id'
+    t.index ['github_id'], name: 'index_projects_on_github_id', unique: true
     t.index ['user_id'], name: 'index_projects_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
-    t.integer 'user_id'
     t.string 'login'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.datetime 'updated_on_github_at'
+    t.integer 'github_id'
+    t.index ['github_id'], name: 'index_users_on_github_id', unique: true
     t.index ['login'], name: 'index_users_on_login'
-    t.index ['user_id'], name: 'index_users_on_user_id'
   end
 
   add_foreign_key 'card_moves', 'cards'

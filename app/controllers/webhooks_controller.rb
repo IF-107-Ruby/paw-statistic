@@ -12,7 +12,7 @@ class WebhooksController < ApplicationController
   private
 
   def handle_github_event
-    payload = JSON.parse(parse_data['payload'])
+    payload = JSON.parse(parse_data['payload']).deep_symbolize_keys
     case request.headers['X-Github-Event']
     when 'project'
       HandleProjectEventJob.perform_later payload

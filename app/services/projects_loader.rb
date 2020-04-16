@@ -1,89 +1,68 @@
 class ProjectsLoader
+  GITHUB_URL = 'https://api.github.com'.freeze
+  include ::GithubJsonParser
+
+  def initialize(github_login:, github_repo:)
+    @github_login = github_login
+    @github_repo = github_repo
+  end
+
   def run
-    projects = GithubApi.client.repo_projects(ENV['GITHUB_LOGIN'], ENV['GITHUB_REPO'])
-    update_projects projects
+    projects_url = "#{GITHUB_URL}/repos/#{@github_login}/#{@github_repo}/projects"
+    projects_json = GithubApi.get(endpoint: projects_url)
+    update_projects projects_json
   end
 
   alias load run
 
   private
 
-  def update_projects(projects)
-    projects.each do |proj|
-      user = find_or_create_user proj.creator.as_json
-      project = find_or_create_project proj.as_json.merge(user: user)
-      update_project_columns project, proj.columns
+  def update_projects(projects_json)
+    projects_json.each do |json|
+      params = project_params_from_github_json(json)
+      next if Project.up_to_date? params
+
+      project = Project.update_or_create(
+        params.merge(user: user_from_json(json[:creator]))
+      )
+      columns_json = GithubApi.get(endpoint: json[:columns_url])
+      update_project_columns project, columns_json
     end
   end
 
-  def update_project_columns(project, columns)
-    columns.each do |col|
-      column = find_or_create_column col.as_json.merge({ project: project })
-      update_column_cards column, col.cards
+  def update_project_columns(project, columns_json)
+    columns_json.each do |json|
+      params = column_params_from_github_json(json)
+      next if Column.up_to_date? params
+
+      column = Column.update_or_create(
+        params.merge(project: project)
+      )
+      cards_json = GithubApi.get(endpoint: json[:cards_url])
+      update_project_cards column, cards_json
     end
   end
 
-  def update_column_cards(column, cards)
-    cards.each do |card|
-      card_creator = find_or_create_user card.creator.as_json
-      issue = get_card_content card unless card.content.nil?
-      find_or_create_card card.as_json.merge({ column: column,
-                                               user: card_creator, issue: issue })
+  def update_project_cards(column, cards_json)
+    cards_json.each do |json|
+      params = card_params_from_github_json(json)
+      next if Card.up_to_date? params
+
+      user = user_from_json(json[:creator])
+      issue = issue_from_url(json[:content_url])
+      Card.update_or_create(
+        params.merge(column: column, user: user, issue: issue)
+      )
     end
   end
 
-  def get_card_content(card)
-    issue_opener = find_or_create_user card.content.user.as_json
-    find_or_create_issue card.content.as_json.merge({ user: issue_opener })
-  end
+  def issue_from_url(url)
+    return if url.nil?
 
-  def find_or_create_user(params)
-    user = User.find_by(user_id: params[:user_id])
-    if user.nil?
-      user = User.create(params)
-    else
-      user.update(params)
-    end
-    user
-  end
-
-  def find_or_create_project(params)
-    project = Project.find_by(project_id: params[:project_id])
-    if project.nil?
-      project = Project.create(params)
-    else
-      project.update(params)
-    end
-    project
-  end
-
-  def find_or_create_issue(params)
-    issue = Issue.find_by(issue_id: params[:issue_id])
-    if issue.nil?
-      issue = Issue.create(params)
-    else
-      issue.update(params)
-    end
-    issue
-  end
-
-  def find_or_create_column(params)
-    column = Column.find_by(column_id: params[:column_id])
-    if column.nil?
-      column = Column.create(params)
-    else
-      column.update(params)
-    end
-    column
-  end
-
-  def find_or_create_card(params)
-    card = Card.find_by(card_id: params[:card_id])
-    if card.nil?
-      card = Card.create(params)
-    else
-      card.update(params)
-    end
-    card
+    issue_json = GithubApi.get(endpoint: url)
+    user = user_from_json(issue_json[:user])
+    Issue.update_or_create(
+      issue_params_from_github_json(issue_json).merge(user: user)
+    )
   end
 end

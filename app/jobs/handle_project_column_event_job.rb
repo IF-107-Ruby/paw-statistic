@@ -1,32 +1,38 @@
 class HandleProjectColumnEventJob < ApplicationJob
+  include ::GithubJsonParser
+
   queue_as :default
 
   def perform(payload)
-    case payload['action']
+    @payload = payload
+    case @payload[:action]
     when 'created'
-      handle_column_created payload
+      handle_column_created
     when 'edited'
-      handle_column_updated payload
+      handle_column_updated
     when 'deleted'
-      handle_column_deleted payload
+      handle_column_deleted
     end
   end
 
   private
 
-  def handle_column_updated(data)
-    col = GithubApi::Models::Column.new json: data['project_column']
-    Column.find_by(column_id: col.column_id)&.update col.as_json
+  def handle_column_updated
+    Column.find_and_update(column_params_from_github_json(@payload[:project_column]))
   end
 
-  def handle_column_created(data)
-    col = GithubApi::Models::Column.new json: data['project_column']
-    col.cards
-    proj = Project.find_by(project_id: col.project.project_id)
-    Column.create col.as_json.merge(project: proj)
+  def handle_column_created
+    project = Project.find_or_create project_params_from_github_json(
+      GithubApi.get(
+        endpoint: @payload[:project_column][:project_url]
+      )
+    )
+    Column.create column_params_from_github_json(
+      @payload[:project_column]
+    ).merge(project: project)
   end
 
-  def handle_column_deleted(data)
-    Column.find_by(column_id: data['project_column']['id'])&.destroy
+  def handle_column_deleted
+    Column.find_by(github_id: @payload[:project_column][:id])&.destroy
   end
 end
