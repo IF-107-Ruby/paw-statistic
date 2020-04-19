@@ -8,7 +8,8 @@ class Card < ApplicationRecord
   def move(from:, to:, moved_by:, moved_at:)
     move = CardMove.create(from: from, to: to, user: moved_by,
                            moved_at: moved_at, card: self)
+    move.previos_move = last_move
     self.last_move = move
-    update(column: to)
+    update(column: to, updated_on_github_at: moved_at)
   end
 end

@@ -24,3 +24,7 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/*"
