@@ -1,6 +1,5 @@
 class ProjectsLoader
   GITHUB_URL = 'https://api.github.com'.freeze
-  include ::GithubJsonParser
 
   def initialize(github_login:, github_repo:)
     @github_login = github_login
@@ -19,12 +18,14 @@ class ProjectsLoader
 
   def update_projects(projects_json)
     projects_json.each do |json|
-      params = project_params_from_github_json(json)
-      next if Project.up_to_date? params
+      project_struct = ProjectStruct.from_json(json)
+      next if Project.up_to_date? project_struct
 
+      user = User.find_or_create UserStruct.from_json(json[:creator])
       project = Project.update_or_create(
-        params.merge(user: user_from_json(json[:creator]))
+        project_struct.to_hash.merge(user: user)
       )
+
       columns_json = GithubApi.get(endpoint: json[:columns_url])
       update_project_columns project, columns_json
     end
@@ -32,11 +33,11 @@ class ProjectsLoader
 
   def update_project_columns(project, columns_json)
     columns_json.each do |json|
-      params = column_params_from_github_json(json)
-      next if Column.up_to_date? params
+      column_struct = ColumnStruct.from_json json
+      next if Column.up_to_date? column_struct
 
       column = Column.update_or_create(
-        params.merge(project: project)
+        column_struct.to_hash.merge(project: project)
       )
       cards_json = GithubApi.get(endpoint: json[:cards_url])
       update_project_cards column, cards_json
@@ -45,24 +46,14 @@ class ProjectsLoader
 
   def update_project_cards(column, cards_json)
     cards_json.each do |json|
-      params = card_params_from_github_json(json)
-      next if Card.up_to_date? params
+      card_struct = CardStruct.from_json json
+      next if Card.up_to_date? card_struct
 
-      user = user_from_json(json[:creator])
-      issue = issue_from_url(json[:content_url])
+      user = User.find_or_create UserStruct.from_json(json[:creator]).to_hash
+      issue = Issue.find_or_create IssueStruct.from_url(json[:content_url]).to_hash
       Card.update_or_create(
-        params.merge(column: column, user: user, issue: issue)
+        card_struct.to_hash.merge(column: column, user: user, issue: issue)
       )
     end
-  end
-
-  def issue_from_url(url)
-    return if url.nil?
-
-    issue_json = GithubApi.get(endpoint: url)
-    user = user_from_json(issue_json[:user])
-    Issue.update_or_create(
-      issue_params_from_github_json(issue_json).merge(user: user)
-    )
   end
 end
