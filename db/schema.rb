@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_200_415_210_306) do
+ActiveRecord::Schema.define(version: 20_200_417_174_145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20_200_415_210_306) do
     t.datetime 'moved_at'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.integer 'next_move_id'
     t.index ['card_id'], name: 'index_card_moves_on_card_id'
     t.index ['user_id'], name: 'index_card_moves_on_user_id'
   end
@@ -64,6 +65,9 @@ ActiveRecord::Schema.define(version: 20_200_415_210_306) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'updated_on_github_at'
     t.integer 'github_id'
+    t.string 'html_url'
+    t.string 'body'
+    t.integer 'assignee_id'
     t.index ['github_id'], name: 'index_issues_on_github_id', unique: true
     t.index ['user_id'], name: 'index_issues_on_user_id'
   end
@@ -78,8 +82,40 @@ ActiveRecord::Schema.define(version: 20_200_415_210_306) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'updated_on_github_at'
     t.integer 'github_id'
+    t.string 'html_url'
     t.index ['github_id'], name: 'index_projects_on_github_id', unique: true
     t.index ['user_id'], name: 'index_projects_on_user_id'
+  end
+
+  create_table 'pull_requests', force: :cascade do |t|
+    t.integer 'github_id'
+    t.string 'html_url'
+    t.integer 'number'
+    t.string 'state'
+    t.string 'title'
+    t.boolean 'locked'
+    t.bigint 'user_id', null: false
+    t.string 'body'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.datetime 'updated_on_github_at'
+    t.index ['github_id'], name: 'index_pull_requests_on_github_id', unique: true
+    t.index ['user_id'], name: 'index_pull_requests_on_user_id'
+  end
+
+  create_table 'task_progresses', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'card_id', null: false
+    t.bigint 'pull_request_id', null: false
+    t.bigint 'issue_id', null: false
+    t.datetime 'started_at'
+    t.datetime 'finished_at'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['card_id'], name: 'index_task_progresses_on_card_id'
+    t.index ['issue_id'], name: 'index_task_progresses_on_issue_id'
+    t.index ['pull_request_id'], name: 'index_task_progresses_on_pull_request_id'
+    t.index ['user_id'], name: 'index_task_progresses_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
@@ -88,10 +124,12 @@ ActiveRecord::Schema.define(version: 20_200_415_210_306) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'updated_on_github_at'
     t.integer 'github_id'
+    t.string 'avatar_url'
     t.index ['github_id'], name: 'index_users_on_github_id', unique: true
     t.index ['login'], name: 'index_users_on_login'
   end
 
+  add_foreign_key 'card_moves', 'card_moves', column: 'next_move_id'
   add_foreign_key 'card_moves', 'cards'
   add_foreign_key 'card_moves', 'columns', column: 'from_id'
   add_foreign_key 'card_moves', 'columns', column: 'to_id'
@@ -102,5 +140,11 @@ ActiveRecord::Schema.define(version: 20_200_415_210_306) do
   add_foreign_key 'cards', 'users'
   add_foreign_key 'columns', 'projects'
   add_foreign_key 'issues', 'users'
+  add_foreign_key 'issues', 'users', column: 'assignee_id'
   add_foreign_key 'projects', 'users'
+  add_foreign_key 'pull_requests', 'users'
+  add_foreign_key 'task_progresses', 'cards'
+  add_foreign_key 'task_progresses', 'issues'
+  add_foreign_key 'task_progresses', 'pull_requests'
+  add_foreign_key 'task_progresses', 'users'
 end
