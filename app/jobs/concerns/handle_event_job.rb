@@ -1,6 +1,4 @@
-class BasicHandleEventJob < ApplicationJob
-  queue_as :default
-
+module HandleEventJob
   def perform(data)
     payload = PayloadStruct.new data
     handler = get_handler(payload.action)

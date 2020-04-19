@@ -1,4 +1,7 @@
-class HandleProjectCardEventJob < BasicHandleEventJob
+class HandleProjectCardEventJob < ApplicationJob
+  include HandleEventJob
+  queue_as :default
+
   private
 
   def get_handler(action)

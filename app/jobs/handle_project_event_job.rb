@@ -1,4 +1,7 @@
-class HandleProjectEventJob < BasicHandleEventJob
+class HandleProjectEventJob < ApplicationJob
+  include HandleEventJob
+  queue_as :default
+
   private
 
   def get_handler(action)
