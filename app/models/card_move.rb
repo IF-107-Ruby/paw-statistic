@@ -1,4 +1,6 @@
 class CardMove < ApplicationRecord
+  include GithubMethods
+
   belongs_to :from, class_name: 'Column'
   belongs_to :to, class_name: 'Column'
   belongs_to :user

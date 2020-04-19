@@ -1,4 +1,6 @@
 class Card < ApplicationRecord
+  include GithubMethods
+
   belongs_to :column
   belongs_to :user
   belongs_to :issue, optional: true

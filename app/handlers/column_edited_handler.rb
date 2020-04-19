@@ -1,5 +1,5 @@
 class ColumnEditedHandler < BasicEventHandler
   def execute!
-    Column.find_and_update payload.project_column.to_hash
+    Column.update_or_create payload.project_column.to_hash
   end
 end

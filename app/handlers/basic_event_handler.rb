@@ -8,6 +8,6 @@ class BasicEventHandler
   def execute!; end
 
   def sender
-    User.find_or_create payload.sender.to_hash
+    User.update_or_create payload.sender.to_hash
   end
 end

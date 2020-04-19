@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include GithubMethods
+
   has_many :projects, dependent: :destroy
   has_many :cards, dependent: :destroy
   has_many :issues, dependent: :destroy

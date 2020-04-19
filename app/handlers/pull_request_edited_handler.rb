@@ -1,5 +1,5 @@
 class PullRequestEditedHandler < BasicEventHandler
   def execute!
-    PullRequest.find_and_update payload.pull_request
+    PullRequest.update_or_create payload.pull_request
   end
 end

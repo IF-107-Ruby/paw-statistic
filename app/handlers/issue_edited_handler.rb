@@ -1,5 +1,5 @@
 class IssueEditedHandler < BasicEventHandler
   def execute!
-    Issue.find_and_update payload.issue.to_hash
+    Issue.update_or_create payload.issue.to_hash
   end
 end
