@@ -1,7 +1,8 @@
 class DashboardsController < ApplicationController
   def show
-    @projects = Project.all.includes(columns: { cards:
-      [{ issue: :user }, :user, { last_move: :user }] })
-    @repo = ENV['GITHUB_REPO']
+    @users = User
+             .includes(assignies: { card: { moves: %i[to next_move] } })
+             .joins(:assignies)
+             .group(:id).order('count(users.id) desc')
   end
 end
