@@ -50,10 +50,16 @@ class ProjectsLoader
       next if Card.up_to_date? card_struct
 
       user = User.update_or_create UserStruct.from_json(json[:creator]).to_hash
-      issue = Issue.update_or_create IssueStruct.from_url(json[:content_url]).to_hash
+      issue = card_issue_from_url(json[:content_url])
       Card.update_or_create(
         card_struct.to_hash.merge(column: column, user: user, issue: issue)
       )
     end
+  end
+
+  def card_issue_from_url(url)
+    issue_struct = IssueStruct.from_url(url)
+    issue_opener = User.update_or_create issue_struct.user
+    Issue.update_or_create issue_struct.to_hash.merge(user: issue_opener)
   end
 end
