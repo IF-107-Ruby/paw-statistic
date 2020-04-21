@@ -19,11 +19,13 @@ script:
 deploy:
   provider: heroku
   api_key:
-    secure: CYEdjR0YHmz5Gr+NWx0mAbnENyjKiyVxg5Eq6vC6aSNcTu6iBpssv+UaRSUrTIuPlTNm4d/lfkPac4EFSoZxNX2k/DSwBwb0Fn6T949CecV41H7Nosr+STVbsLWvLdIhtKrDRwIm7Qw3cyckf/XpvoBSWMKtq0tUtvYCk0sHcz8Sk4eLKazZsplS8pcFS200ZFOp7G1s3VmreNp00GUTHCn1XFyrAW2EneGuCcRcIDNAngX/jQ759E1he9GUB0nx1CIpRcV4oKYOAu9sv4Y0T9Zd782fj999CDxLQgkIabLkGDRrPCjPtaGCjMPbuf5g9oRdEkuZBOxBLdds+MVhPvoz6o8Ew48AtuE3ViVTTDRJo03Dw8KokmM3L9v0sqwvb8loBNrWbD43+cRErl0Tn+iqMWal6QuUEb/L8aceFWRyMuG33w6FK9UhWleIKR4s4lumC8qu0CFjXZ5o6kU/lp/8MwAPHdHfIzAARYwPfu5pINEsVwcmhEQ3zXLo/mAYjvofDvPgwpoYyFOPqwdJC8RrygDBDqm20Hh64xLpjyebrpMt8EeuaHPD0ESfQcYfDp0dmpKc8pEFuSiMTtLOHuKuCXPYps9WK7Iu7BS/6jJQalnXCbePGs83cstCrDuY0Bxvxu+EipBw+NFjwVtsQIhdQ45F6mTkNwGUCYZPlkw=
+    secure: nQbcgOmXaZXUp/9VD6sPIPTSknTGr3pJbADyE1g0NJ6DW/k0ScvKHMRMiVnVQY/GrG8hmSC3YOj/CMyhh+MVZs2Kgy7ERA14U8mk3RubR6FuLNRe9CmjqC9QoxL8y7vp6f/qb/EC3F+2wJg+YtzaE1GhR28CvSy2SggliGSM3Dv8q3M7Vyl8px4AZDXX1RBx3Q7mbnZp7+w9klVWxad2wfdIwCAf7KldkaJ+rxliszjyxW/1xgnJ3GhF+tSEW4uiJKJmhorg9o29Sp+tiBc4lABUkovDMHl1WcxyeHLsHpc2V2ZjGwZUrBICQu4QKYF7XNMnOK7OM5hc6eoOpPantuLyFE00/TxF72iaf2W7cS9W5l4tyEqzA5Lk2X3iSRXN+/mHkCbyWnJ17GCU7vDV+gd4DNjJgns3MhkJQcr3gSK/b83Zv0CaHyq7r270n/4nseMWcN6CmM/UCW7RRzLKh1Txk0oTF26f+WmuQa/vq1clbQW4OW3y2OLjfHwGUgEwYRGkbosQGXAYQTnSS+uMdvoHbsnM+VQY54GqSSjFzwgyDP28qHrjhMy45Cv5ML/Lw9ThQcH5d61R7z855zsIsN1a0J+9PiLN4BP15cz0e4fuppkbPn8G1TconFJUuOKaWvOrXjGsLD8CgIinyq5OPeK+JFwRWW+si9RxnXWlx1c=
+  app: paw-statistics
   before_deploy:
-  - cp config/database.yml.heroku config/database.yml
-  run:
-  - rake db:migrate
-  - rake cleanup
+    - cp config/database.yml.heroku config/database.yml
+    run:
+    - rake db:migrate
+    - rake cleanup
   on:
-    all_branches: true
+    repo: IF-107-Ruby/paw-statistics
+    branch: refactoring
