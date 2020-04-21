@@ -21,7 +21,7 @@ class ProjectsLoader
       project_struct = ProjectStruct.from_json(json)
       next if Project.up_to_date? project_struct
 
-      user = User.update_or_create UserStruct.from_json(json[:creator])
+      user = User.update_or_create UserStruct.from_json(json[:creator]).to_hash
       project = Project.update_or_create(
         project_struct.to_hash.merge(user: user)
       )
@@ -60,6 +60,10 @@ class ProjectsLoader
   def card_issue_from_url(url)
     issue_struct = IssueStruct.from_url(url)
     issue_opener = User.update_or_create issue_struct.user.to_hash
-    Issue.update_or_create issue_struct.to_hash.merge(user: issue_opener)
+    if issue_struct.assignee
+      assignee = User.update_or_create issue_struct.assignee.to_hash
+    end
+    Issue.update_or_create issue_struct
+      .to_hash.merge(user: issue_opener, assignee: assignee)
   end
 end
