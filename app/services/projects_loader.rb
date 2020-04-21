@@ -59,7 +59,7 @@ class ProjectsLoader
 
   def card_issue_from_url(url)
     issue_struct = IssueStruct.from_url(url)
-    issue_opener = User.update_or_create issue_struct.user
+    issue_opener = User.update_or_create issue_struct.user.to_hash
     Issue.update_or_create issue_struct.to_hash.merge(user: issue_opener)
   end
 end

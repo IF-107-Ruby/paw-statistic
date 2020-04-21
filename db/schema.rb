@@ -96,26 +96,11 @@ ActiveRecord::Schema.define(version: 20_200_417_174_145) do
     t.boolean 'locked'
     t.bigint 'user_id', null: false
     t.string 'body'
+    t.datetime 'updated_on_github_at'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.datetime 'updated_on_github_at'
     t.index ['github_id'], name: 'index_pull_requests_on_github_id', unique: true
     t.index ['user_id'], name: 'index_pull_requests_on_user_id'
-  end
-
-  create_table 'task_progresses', force: :cascade do |t|
-    t.bigint 'user_id', null: false
-    t.bigint 'card_id', null: false
-    t.bigint 'pull_request_id', null: false
-    t.bigint 'issue_id', null: false
-    t.datetime 'started_at'
-    t.datetime 'finished_at'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['card_id'], name: 'index_task_progresses_on_card_id'
-    t.index ['issue_id'], name: 'index_task_progresses_on_issue_id'
-    t.index ['pull_request_id'], name: 'index_task_progresses_on_pull_request_id'
-    t.index ['user_id'], name: 'index_task_progresses_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
@@ -143,8 +128,4 @@ ActiveRecord::Schema.define(version: 20_200_417_174_145) do
   add_foreign_key 'issues', 'users', column: 'assignee_id'
   add_foreign_key 'projects', 'users'
   add_foreign_key 'pull_requests', 'users'
-  add_foreign_key 'task_progresses', 'cards'
-  add_foreign_key 'task_progresses', 'issues'
-  add_foreign_key 'task_progresses', 'pull_requests'
-  add_foreign_key 'task_progresses', 'users'
 end
