@@ -28,3 +28,7 @@ Style/FrozenStringLiteralComment:
 Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - "app/jobs/*"

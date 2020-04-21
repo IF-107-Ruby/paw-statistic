@@ -10,6 +10,7 @@ class HandleIssueEventJob < ApplicationJob
     when 'edited' then IssueEditedHandler
     when 'assigned' then IssueAssignedHandler
     when 'unassigned' then IssueUnassignedHandler
+    when 'closed' then IssueClosedHandler
     when 'deleted' then IssueDeletedHandler; end
   end
 end
