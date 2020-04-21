@@ -16,3 +16,12 @@ before_script:
 script:
   - bundle exec rspec
   - bundle exec rubocop --require rubocop-rails
+deploy:
+  provider: heroku
+  api_key:
+    secure: sTjRBZ0upHak7DQyIPiqXei0lcceYzDYDWiceFBZRC9Xog9aN0Czj9Ght1jxtwJKAMLw+/+KiVCI/RCmuIGAA1p5NwceaQ6n+fs4VPc0VyKz71WMDuLG6iQvG531UqlSQNAcj0WsqSWf/ITZtxULvGin/n+dTd6YOm+S9c1+Aw9LqI5JqdUTsTkznedaR2Ee3lhNBAiTiKIyCbSsCr/3zopN8c49Syou+ykqm32Ql7gnLSgq223ij0L7XBIfrEtIM+kfJG4J0Y6sZu0tZN0YSzLIvZjjDYmYqCa9HYY+B7dWLSTbcyKTo2nYiQh7HMZd+RseO3eV1dWg8j2pFQFQMy9Ko5ds9JeGoyNNJOGmA+I2IIY8tQwU6eEUKtW4GkElLgBgBc8jX9bCH+SdKfvHj2ZfnDJsl82HFUOmkPoN1/Wzh5k79PVLYVYPDMcp3MKMaA//mIyduOgplhk39e/cV/8hmEBIc+Gu8sIkrXEyB4BWf4+8vGukQYgymR/Q2gFaBtm8O1hSJQ10E7zBAakddI23f6eKhSNpE7E4863jqmIeMkY1rt/zjqkqBVlaOx2KLz4qAwDSeL0HCMqHRnKS+HgMkNTZMo2FFsPwMc7J6F+k4j3WoJk3wTWB3GjkhkHn9Sdt8MGgC4GVzyRjgRMAl9C+j7DKj9djYzy2mNaMtg0=
+  before_deploy:
+    - "cp config/database.yml.heroku config/database.yml"
+  run:
+    - "rake db:migrate"
+    - "rake cleanup"
