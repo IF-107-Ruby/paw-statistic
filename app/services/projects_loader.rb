@@ -50,18 +50,18 @@ class ProjectsLoader
       next if Card.up_to_date?(card_struct)
 
       user = User.update_or_create UserStruct.new(json[:creator])
-      issue = card_issue_from_url(json[:content_url])
+      issue = issue_from_struct(card_struct.issue) if card_struct.issue
       Card.update_or_create(
         card_struct.with_params(column: column, user: user, issue: issue)
       )
     end
   end
 
-  def card_issue_from_url(url)
-    issue_struct = IssueStruct.from_url(url)
-    issue_opener = User.update_or_create(issue_struct.user)
-    assignee = User.update_or_create issue_struct.assignee if issue_struct.assignee
-    Issue.update_or_create issue_struct
-      .with_params(user: issue_opener, assignee: assignee)
+  def issue_from_struct(issue)
+    issue_opener = User.update_or_create(issue.user)
+    assignee = User.update_or_create issue.assignee if issue.assignee
+    Issue.update_or_create(issue.with_params(
+                             user: issue_opener, assignee: assignee
+                           ))
   end
 end

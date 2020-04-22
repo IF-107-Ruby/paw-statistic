@@ -1,4 +1,12 @@
-PayloadStruct = Struct.new(:payload) do
+class PayloadStruct
+  attr_accessor :payload
+
+  delegate :issue, to: :project_card, prefix: true
+
+  def initialize(payload)
+    @payload = payload
+  end
+
   def action
     payload[:action]
   end
