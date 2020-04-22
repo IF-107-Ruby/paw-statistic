@@ -4,10 +4,7 @@ class WebhooksController < ApplicationController
 
   def receive
     case request.headers['X-Github-Event']
-    when 'project' then HandleProjectEventJob.perform_later payload
-    when 'project_column' then HandleProjectColumnEventJob.perform_later payload
     when 'project_card' then HandleProjectCardEventJob.perform_later payload
-    when 'pull_request' then HandlePullRequestEventJob.perform_later payload
     when 'issues' then HandleIssueEventJob.perform_later payload; end
     render json: { received: true }, status: :ok
   end

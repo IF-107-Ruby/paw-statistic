@@ -1,29 +1,21 @@
-CardStruct = Struct.new(
-  :github_id,
-  :note,
-  :archived,
-  :column_id,
-  :content_url,
-  :updated_on_github_at
-) do
-  class << self
-    def from_json(json)
-      CardStruct.new(
-        json[:id],
-        json[:note],
-        json[:archived],
-        json[:column_id],
-        json[:content_url],
-        json[:updated_at]
-      )
-    end
+class CardStruct < BaseModelStruct
+  attr_reader :github_id, :note, :archived, :column_id,
+              :content_url, :updated_on_github_at
+
+  def initialize(json)
+    @github_id = json[:id]
+    @note = json[:note]
+    @archived = json[:archived]
+    @column_id = json[:column_id]
+    @content_url = json[:content_url]
+    @updated_on_github_at = json[:updated_at]
   end
 
   def issue
-    IssueStruct.from_url(content_url)
+    @issue ||= IssueStruct.from_url(content_url)
   end
 
-  def to_hash
+  def as_json
     {
       github_id: github_id,
       note: note,

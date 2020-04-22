@@ -1,5 +1,5 @@
 class CardEditedHandler < BasicEventHandler
   def execute!
-    Card.update_or_create payload.project_card.to_hash
+    Card.update_or_create params.project_card
   end
 end

@@ -4,30 +4,30 @@ PayloadStruct = Struct.new(:payload) do
   end
 
   def sender
-    UserStruct.from_json(payload[:sender])
+    UserStruct.new(payload[:sender])
   end
 
   def project
-    ProjectStruct.from_json(payload[:project])
+    ProjectStruct.new(payload[:project])
   end
 
   def issue
-    IssueStruct.from_json(payload[:issue])
+    IssueStruct.new(payload[:issue])
   end
 
   def project_card
-    CardStruct.from_json(payload[:project_card])
+    CardStruct.new(payload[:project_card])
   end
 
   def assignee
-    UserStruct.from_json(payload[:assignee])
+    UserStruct.new(payload[:assignee])
   end
 
   def project_column
-    ColumnStruct.from_json(payload[:project_column])
+    ColumnStruct.new(payload[:project_column])
   end
 
   def pull_request
-    PullRequestStruct.from_json(payload[:pull_request])
+    PullRequestStruct.new(payload[:pull_request])
   end
 end

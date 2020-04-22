@@ -1,5 +1,5 @@
 class IssueClosedHandler < BasicEventHandler
   def execute!
-    Issue.update_or_create payload.issue.to_hash
+    Issue.update_or_create params.issue
   end
 end

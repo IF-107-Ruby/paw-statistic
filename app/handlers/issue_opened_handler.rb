@@ -1,5 +1,5 @@
 class IssueOpenedHandler < BasicEventHandler
   def execute!
-    Issue.create(payload.issue.to_hash.merge(user: sender))
+    Issue.create(params.issue.with_params(user: sender))
   end
 end

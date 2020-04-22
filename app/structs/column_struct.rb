@@ -1,25 +1,18 @@
-ColumnStruct = Struct.new(
-  :github_id,
-  :name,
-  :project_url,
-  :updated_on_github_at
-) do
-  class << self
-    def from_json(json)
-      ColumnStruct.new(
-        json[:id],
-        json[:name],
-        json[:project_url],
-        json[:updated_at]
-      )
-    end
+class ColumnStruct < BaseModelStruct
+  attr_accessor :github_id, :name, :project_url, :updated_on_github_at
+
+  def initialize(json)
+    @github_id = json[:id]
+    @name = json[:name]
+    @project_url = json[:project_url]
+    @updated_on_github_at = json[:updated_at]
   end
 
   def project
-    ProjectStruct.from_url(project_url)
+    @project ||= ProjectStruct.from_url(project_url)
   end
 
-  def to_hash
+  def as_json
     {
       github_id: github_id,
       name: name,
