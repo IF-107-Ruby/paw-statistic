@@ -87,22 +87,6 @@ ActiveRecord::Schema.define(version: 20_200_417_174_145) do
     t.index ['user_id'], name: 'index_projects_on_user_id'
   end
 
-  create_table 'pull_requests', force: :cascade do |t|
-    t.integer 'github_id'
-    t.string 'html_url'
-    t.integer 'number'
-    t.string 'state'
-    t.string 'title'
-    t.boolean 'locked'
-    t.bigint 'user_id', null: false
-    t.string 'body'
-    t.datetime 'updated_on_github_at'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['github_id'], name: 'index_pull_requests_on_github_id', unique: true
-    t.index ['user_id'], name: 'index_pull_requests_on_user_id'
-  end
-
   create_table 'users', force: :cascade do |t|
     t.string 'login'
     t.datetime 'created_at', precision: 6, null: false
@@ -127,5 +111,4 @@ ActiveRecord::Schema.define(version: 20_200_417_174_145) do
   add_foreign_key 'issues', 'users'
   add_foreign_key 'issues', 'users', column: 'assignee_id'
   add_foreign_key 'projects', 'users'
-  add_foreign_key 'pull_requests', 'users'
 end
