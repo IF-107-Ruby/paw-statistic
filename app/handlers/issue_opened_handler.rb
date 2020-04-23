@@ -1,5 +1,7 @@
 class IssueOpenedHandler < BasicEventHandler
+  delegate :issue, to: :params
+
   def execute!
-    Issue.create(params.issue.with_params(user: sender))
+    Issue.create(issue.with_params(user: sender))
   end
 end

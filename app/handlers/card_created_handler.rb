@@ -1,9 +1,12 @@
 class CardCreatedHandler < BasicEventHandler
+  delegate :project_card, to: :params
+  delegate :column_id, to: :project_card
+
   def execute!
-    Card.create(params.project_card.with_params(user: sender, column: column))
+    Card.create(project_card.with_params(user: sender, column: column))
   end
 
   def column
-    Column.find_by(github_id: params.project_card.column_id)
+    Column.find_by(github_id: column_id)
   end
 end
