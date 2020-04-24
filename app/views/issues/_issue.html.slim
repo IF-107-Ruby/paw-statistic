@@ -1,7 +1,7 @@
 .container.border.mb-3.bg-white.rounded.p-2
   = link_to issue.html_url
     h4 = issue.title
-  = issue_state issue
+  = issue.decorated_state
   - unless issue.card.moves.empty?
     hr
-  = render issue.card.moves
+  = render CardMoveDecorator.decorate_collection(issue.card.moves)
