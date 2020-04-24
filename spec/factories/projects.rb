@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :project do
-    github_id { Faker::Number.number(digits: 6) }
     user { create(:user) }
     name { Faker::Lorem.sentence }
     body { Faker::Lorem.sentence }

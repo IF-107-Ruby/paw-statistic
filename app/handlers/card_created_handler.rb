@@ -7,6 +7,6 @@ class CardCreatedHandler < BasicEventHandler
   end
 
   def column
-    Column.find_by(github_id: column_id)
+    Column.find(column_id)
   end
 end

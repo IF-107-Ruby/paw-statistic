@@ -1,9 +1,10 @@
 class IssueStruct < BaseModelStruct
-  attr_accessor :github_id, :title, :state, :locked, :number, :html_url,
+  attr_accessor :id, :title, :state, :locked, :number, :html_url,
                 :body, :updated_on_github_at, :user_json, :assignee_json
 
   def initialize(params)
-    @github_id = params[:id]
+    @params = params
+    @id = params[:id]
     @title = params[:title]
     @state = params[:state]
     @locked = params[:locked]
@@ -11,8 +12,6 @@ class IssueStruct < BaseModelStruct
     @html_url = params[:html_url]
     @body = params[:body]
     @updated_on_github_at = params[:updated_at]
-    @user_json = params[:user]
-    @assignee_json = params[:assignee]
   end
 
   def self.from_url(url)
@@ -23,18 +22,37 @@ class IssueStruct < BaseModelStruct
   end
 
   def user
-    @user ||= UserStruct.new(user_json)
+    user = @params[:user]
+    @user ||= if user.is_a?(Hash)
+                UserStruct.new(user)
+              else
+                user
+              end
   end
 
   def assignee
-    @assignee ||= UserStruct.new(assignee_json) unless assignee_json.nil?
+    assignee = @params[:assignee]
+    @assignee ||= if assignee.is_a?(Hash)
+                    UserStruct.new(assignee)
+                  else
+                    assignee
+                  end
   end
 
   def to_params
-    { github_id: github_id, title: title, state: state,
-      locked: locked, number: number, html_url: html_url,
-      updated_on_github_at: updated_on_github_at }
+    params = main_params
+    user.is_a?(ApplicationRecord) && params.merge!(user: user)
+    assignee.is_a?(ApplicationRecord) && params.merge!(assignee: assignee)
+    params
   end
 
   alias to_hash to_params
+
+  private
+
+  def main_params
+    { id: id, title: title, state: state,
+      locked: locked, number: number, html_url: html_url,
+      updated_on_github_at: updated_on_github_at }
+  end
 end

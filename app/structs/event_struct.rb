@@ -32,8 +32,4 @@ class EventStruct
   def project_column
     ColumnStruct.new(payload[:project_column])
   end
-
-  def pull_request
-    PullRequestStruct.new(payload[:pull_request])
-  end
 end

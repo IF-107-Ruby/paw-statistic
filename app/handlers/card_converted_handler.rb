@@ -1,6 +1,6 @@
 class CardConvertedHandler < BasicEventHandler
   delegate :project_card, to: :event
-  delegate :issue, :github_id, to: :project_card
+  delegate :issue, :id, to: :project_card
 
   def execute!
     issue = Issue.update_or_create(issue.with_params(user: sender))
@@ -8,6 +8,6 @@ class CardConvertedHandler < BasicEventHandler
   end
 
   def card
-    Card.find_by(github_id: github_id)
+    Card.find(id)
   end
 end

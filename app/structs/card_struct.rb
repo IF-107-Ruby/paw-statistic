@@ -1,9 +1,10 @@
 class CardStruct < BaseModelStruct
-  attr_reader :github_id, :note, :archived, :column_id,
+  attr_reader :id, :note, :archived, :column_id,
               :content_url, :updated_on_github_at
 
   def initialize(params)
-    @github_id = params[:id]
+    @params = params
+    @id = params[:id]
     @note = params[:note]
     @archived = params[:archived]
     @column_id = params[:column_id]
@@ -16,13 +17,23 @@ class CardStruct < BaseModelStruct
   end
 
   def to_params
+    params = main_params
+    @params[:column].is_a?(ApplicationRecord) && params.merge!(column: @params[:column])
+    @params[:user].is_a?(ApplicationRecord) && params.merge!(user: @params[:user])
+    @params[:issue].is_a?(ApplicationRecord) && params.merge!(issue: @params[:issue])
+    params
+  end
+
+  alias to_hash to_params
+
+  private
+
+  def main_params
     {
-      github_id: github_id,
+      id: id,
       note: note,
       archived: archived,
       updated_on_github_at: updated_on_github_at
     }
   end
-
-  alias to_hash to_params
 end

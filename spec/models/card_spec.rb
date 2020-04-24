@@ -6,7 +6,6 @@ RSpec.describe Card, type: :model do
     it { should belong_to(:column) }
     it { should belong_to(:issue).optional(true) }
     it { should have_many(:moves).class_name('CardMove') }
-    it { should belong_to(:last_move).class_name('CardMove').optional(true) }
   end
 
   describe '#move' do
@@ -18,7 +17,6 @@ RSpec.describe Card, type: :model do
       expect(card.column).not_to be_equal(column)
       card.move(to: column, moved_by: user, moved_at: Time.zone.now)
       expect(card.column).to be_equal(column)
-      expect(card.last_move.id).to be_equal(CardMove.last.id)
     end
   end
 end

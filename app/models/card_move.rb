@@ -9,8 +9,4 @@ class CardMove < ApplicationRecord
 
   has_one :previos_move, class_name: 'CardMove', inverse_of: 'next_move',
                          dependent: :nullify, foreign_key: 'next_move_id'
-
-  has_one :cards_last_move,
-          class_name: 'Card', inverse_of: 'last_move',
-          foreign_key: 'last_move_id', dependent: :nullify
 end
