@@ -1,5 +1,5 @@
 class IssueAssignedHandler < BasicEventHandler
-  delegate :issue, :assignee, to: :params
+  delegate :issue, :assignee, to: :event
   delegate :github_id, :column_id, to: :issue
 
   def execute!

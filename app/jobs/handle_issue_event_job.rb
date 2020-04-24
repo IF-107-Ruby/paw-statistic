@@ -1,16 +1,14 @@
-class HandleIssueEventJob < ApplicationJob
-  include HandleEventJob
-  queue_as :default
-
+class HandleIssueEventJob < BasicHandleEventJob
   private
 
-  def get_handler(action)
+  def handler_class(action)
     case action
     when 'opened' then IssueOpenedHandler
     when 'edited' then IssueEditedHandler
     when 'assigned' then IssueAssignedHandler
     when 'unassigned' then IssueUnassignedHandler
     when 'closed' then IssueClosedHandler
-    when 'deleted' then IssueDeletedHandler; end
+    when 'deleted' then IssueDeletedHandler
+    else super; end
   end
 end

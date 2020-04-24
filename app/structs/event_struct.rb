@@ -1,4 +1,4 @@
-class PayloadStruct
+class EventStruct
   attr_accessor :payload
 
   def initialize(payload)

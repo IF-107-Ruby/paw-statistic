@@ -1,5 +1,5 @@
 class CardCreatedHandler < BasicEventHandler
-  delegate :project_card, to: :params
+  delegate :project_card, to: :event
   delegate :column_id, to: :project_card
 
   def execute!

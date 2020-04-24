@@ -12,17 +12,22 @@ class WebhooksController < ApplicationController
   private
 
   def verify_signature
-    signature = 'sha1=' + OpenSSL::HMAC.hexdigest(
+    return unless compare_signatures
+
+    render 'Invalid signature', status: :unauthorized
+  end
+
+  def compare_signatures
+    Rack::Utils
+      .secure_compare(signature, request.headers['X-Hub-Signature'])
+  end
+
+  def signature
+    'sha1=' + OpenSSL::HMAC.hexdigest(
       OpenSSL::Digest.new('sha1'),
       ENV['SECRET_TOKEN'],
       parse_data['payload']
     )
-    unless Rack::Utils
-           .secure_compare(signature, request.headers['X-Hub-Signature'])
-      return
-    end
-
-    render 'Invalid signature', status: :unauthorized
   end
 
   def payload

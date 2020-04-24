@@ -1,9 +1,11 @@
 class BaseModelStruct
-  def as_json
-    super.deep_symbolize_keys
+  def with_params(params)
+    self.class.new(to_params.merge(params))
   end
 
-  def with_params(params)
-    as_json.merge(params)
+  def to_params
+    instance_values.symbolize_keys
   end
+
+  alias to_hash to_params
 end

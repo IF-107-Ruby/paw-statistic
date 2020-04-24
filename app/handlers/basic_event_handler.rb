@@ -1,15 +1,13 @@
 class BasicEventHandler
-  attr_reader :payload
+  attr_reader :event
 
-  alias params payload
-
-  def initialize(payload)
-    @payload = payload
+  def initialize(event)
+    @event = event
   end
 
   def execute!; end
 
   def sender
-    User.update_or_create params.sender
+    User.update_or_create event.sender
   end
 end

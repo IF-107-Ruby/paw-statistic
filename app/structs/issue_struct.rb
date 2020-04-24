@@ -2,17 +2,17 @@ class IssueStruct < BaseModelStruct
   attr_accessor :github_id, :title, :state, :locked, :number, :html_url,
                 :body, :updated_on_github_at, :user_json, :assignee_json
 
-  def initialize(json)
-    @github_id = json[:id]
-    @title = json[:title]
-    @state = json[:state]
-    @locked = json[:locked]
-    @number = json[:number]
-    @html_url = json[:html_url]
-    @body = json[:body]
-    @updated_on_github_at = json[:updated_at]
-    @user_json = json[:user]
-    @assignee_json = json[:assignee]
+  def initialize(params)
+    @github_id = params[:id]
+    @title = params[:title]
+    @state = params[:state]
+    @locked = params[:locked]
+    @number = params[:number]
+    @html_url = params[:html_url]
+    @body = params[:body]
+    @updated_on_github_at = params[:updated_at]
+    @user_json = params[:user]
+    @assignee_json = params[:assignee]
   end
 
   def self.from_url(url)
@@ -30,9 +30,11 @@ class IssueStruct < BaseModelStruct
     @assignee ||= UserStruct.new(assignee_json) unless assignee_json.nil?
   end
 
-  def as_json
+  def to_params
     { github_id: github_id, title: title, state: state,
       locked: locked, number: number, html_url: html_url,
       updated_on_github_at: updated_on_github_at }
   end
+
+  alias to_hash to_params
 end

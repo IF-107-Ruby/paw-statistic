@@ -1,5 +1,5 @@
 class CardConvertedHandler < BasicEventHandler
-  delegate :project_card, to: :params
+  delegate :project_card, to: :event
   delegate :issue, :github_id, to: :project_card
 
   def execute!

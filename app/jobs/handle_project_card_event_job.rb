@@ -1,15 +1,13 @@
-class HandleProjectCardEventJob < ApplicationJob
-  include HandleEventJob
-  queue_as :default
-
+class HandleProjectCardEventJob < BasicHandleEventJob
   private
 
-  def get_handler(action)
+  def handler_class(action)
     case action
     when 'created' then CardCreatedHandler
     when 'edited' then CardEditedHandler
     when 'converted' then CardConvertedHandler
     when 'moved' then CardMovedHandler
-    when 'deleted' then CardDeletedHandler; end
+    when 'deleted' then CardDeletedHandler
+    else super; end
   end
 end
