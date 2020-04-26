@@ -6,11 +6,11 @@ class ColumnStruct < BaseModelStruct
     @name = params[:name]
     @project_url = params[:project_url]
     @updated_on_github_at = params[:updated_at]
-    @_project = params[:project]
+    @project = params[:project]
   end
 
   def project
-    @_project ||= ProjectStruct.from_url(project_url)
+    @project ||= ProjectStruct.from_url(project_url)
   end
 
   def to_params

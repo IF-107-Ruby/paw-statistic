@@ -13,7 +13,7 @@ class CardStruct < BaseModelStruct
   end
 
   def issue
-    @_issue ||= IssueStruct.from_url(content_url)
+    @issue ||= IssueStruct.from_url(content_url)
   end
 
   def to_params
