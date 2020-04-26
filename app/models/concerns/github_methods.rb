@@ -10,7 +10,7 @@ module GithubMethods
     def update_or_create(source)
       obj = find_by(id: source.id)
       if obj.nil?
-        obj = create(source.to_hash)
+        obj = create(source)
       elsif obj.updated_on_github_at != source.updated_on_github_at
         obj.update(source.to_hash)
       end
