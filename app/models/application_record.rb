@@ -4,4 +4,8 @@ class ApplicationRecord < ActiveRecord::Base
   def self.create(params)
     super(params.to_hash)
   end
+
+  def update(params)
+    super(params.to_hash)
+  end
 end

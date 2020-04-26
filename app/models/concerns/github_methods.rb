@@ -12,7 +12,7 @@ module GithubMethods
       if obj.nil?
         obj = create(source)
       elsif obj.updated_on_github_at != source.updated_on_github_at
-        obj.update(source.to_hash)
+        obj.update(source)
       end
       obj
     end
