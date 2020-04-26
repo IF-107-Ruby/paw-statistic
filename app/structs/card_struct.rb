@@ -13,27 +13,16 @@ class CardStruct < BaseModelStruct
   end
 
   def issue
-    @issue ||= IssueStruct.from_url(content_url)
+    @_issue ||= IssueStruct.from_url(content_url)
   end
 
   def to_params
-    params = main_params
-    @params[:column].is_a?(ApplicationRecord) && params.merge!(column: @params[:column])
-    @params[:user].is_a?(ApplicationRecord) && params.merge!(user: @params[:user])
-    @params[:issue].is_a?(ApplicationRecord) && params.merge!(issue: @params[:issue])
-    params
+    super.slice(:id, :note, :archived, :updated_on_github_at).tap do |result|
+      result[:column] = @params[:column] if @params[:column].is_a?(ApplicationRecord)
+      result[:user] = @params[:user] if @params[:user].is_a?(ApplicationRecord)
+      result[:issue] = @params[:issue] if @params[:issue].is_a?(ApplicationRecord)
+    end
   end
 
   alias to_hash to_params
-
-  private
-
-  def main_params
-    {
-      id: id,
-      note: note,
-      archived: archived,
-      updated_on_github_at: updated_on_github_at
-    }
-  end
 end

@@ -6,28 +6,18 @@ class ColumnStruct < BaseModelStruct
     @name = params[:name]
     @project_url = params[:project_url]
     @updated_on_github_at = params[:updated_at]
-    @project = params[:project]
+    @_project = params[:project]
   end
 
   def project
-    @project ||= ProjectStruct.from_url(project_url)
+    @_project ||= ProjectStruct.from_url(project_url)
   end
 
   def to_params
-    params = main_params
-    project.is_a?(ApplicationRecord) && params.merge!(project: project)
-    params
+    super.slice(:id, :name, :updated_on_github_at).tap do |result|
+      result[:project] = project if project.is_a?(ApplicationRecord)
+    end
   end
 
   alias to_hash to_params
-
-  private
-
-  def main_params
-    {
-      id: id,
-      name: name,
-      updated_on_github_at: updated_on_github_at
-    }
-  end
 end

@@ -1,6 +1,6 @@
 class IssueStruct < BaseModelStruct
-  attr_accessor :id, :title, :state, :locked, :number, :html_url,
-                :body, :updated_on_github_at, :user_json, :assignee_json
+  attr_accessor :id, :title, :state, :locked, :number,
+                :html_url, :body, :updated_on_github_at
 
   def initialize(params)
     @params = params
@@ -23,36 +23,29 @@ class IssueStruct < BaseModelStruct
 
   def user
     user = @params[:user]
-    @user ||= if user.is_a?(Hash)
-                UserStruct.new(user)
-              else
-                user
-              end
+    @_user ||= if user.is_a?(Hash)
+                 UserStruct.new(user)
+               else
+                 user
+               end
   end
 
   def assignee
     assignee = @params[:assignee]
-    @assignee ||= if assignee.is_a?(Hash)
-                    UserStruct.new(assignee)
-                  else
-                    assignee
-                  end
+    @_assignee ||= if assignee.is_a?(Hash)
+                     UserStruct.new(assignee)
+                   else
+                     assignee
+                   end
   end
 
   def to_params
-    params = main_params
-    user.is_a?(ApplicationRecord) && params.merge!(user: user)
-    assignee.is_a?(ApplicationRecord) && params.merge!(assignee: assignee)
-    params
+    super.slice(:id, :title, :state, :locked, :body,
+                :number, :html_url, :updated_on_github_at).tap do |result|
+      result[:user] = user if user.is_a?(ApplicationRecord)
+      result[:assignee] = assignee if assignee.is_a?(ApplicationRecord)
+    end
   end
 
   alias to_hash to_params
-
-  private
-
-  def main_params
-    { id: id, title: title, state: state,
-      locked: locked, number: number, html_url: html_url,
-      updated_on_github_at: updated_on_github_at }
-  end
 end

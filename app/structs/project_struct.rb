@@ -1,6 +1,6 @@
 class ProjectStruct < BaseModelStruct
   attr_accessor :id, :name, :body, :state, :number,
-                :html_url, :updated_on_github_at
+                :html_url, :updated_on_github_at, :user
 
   def initialize(params)
     @id = params[:id]
@@ -21,23 +21,11 @@ class ProjectStruct < BaseModelStruct
   end
 
   def to_params
-    params = main_params
-    @user.is_a?(ApplicationRecord) && params.merge!(user: @user)
-    params
+    super.slice(:id, :name, :state, :number, :body,
+                :html_url, :updated_on_github_at).tap do |result|
+      result[:user] = user if user.is_a?(ApplicationRecord)
+    end
   end
 
   alias to_hash to_params
-
-  private
-
-  def main_params
-    {
-      id: id,
-      name: name,
-      body: body,
-      state: state,
-      number: number,
-      html_url: html_url
-    }
-  end
 end

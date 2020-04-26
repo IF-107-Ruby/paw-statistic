@@ -4,14 +4,8 @@ class BaseModelStruct
   end
 
   def to_params
-    main_params
+    instance_values.symbolize_keys
   end
 
   alias to_hash to_params
-
-  private
-
-  def main_params
-    instance_values.symbolize_keys
-  end
 end
