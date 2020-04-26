@@ -8,4 +8,10 @@ FactoryBot.define do
     locked { false }
     number { Faker::Number.unique.number(digits: 2) }
   end
+
+  trait :with_assignee do
+    after(:build) do |issue|
+      issue.assignee = create(:user)
+    end
+  end
 end
