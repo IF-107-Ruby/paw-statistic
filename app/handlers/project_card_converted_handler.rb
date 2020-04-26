@@ -1,4 +1,4 @@
-class CardConvertedHandler < BasicEventHandler
+class ProjectCardConvertedHandler < BasicEventHandler
   delegate :project_card, to: :event
   delegate :id, to: :project_card
 

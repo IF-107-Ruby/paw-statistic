@@ -1,7 +1,8 @@
 class EventStruct
-  attr_accessor :payload
+  attr_accessor :payload, :type
 
-  def initialize(payload)
+  def initialize(type, payload)
+    @type = type
     @payload = payload
   end
 

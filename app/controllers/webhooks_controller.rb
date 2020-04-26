@@ -3,9 +3,7 @@ class WebhooksController < ApplicationController
   before_action :verify_signature
 
   def receive
-    case request.headers['X-Github-Event']
-    when 'project_card' then HandleProjectCardEventJob.perform_later payload
-    when 'issues' then HandleIssueEventJob.perform_later payload; end
+    HandleEventJob.perform_later event_type, payload
     render json: { received: true }, status: :ok
   end
 
@@ -32,6 +30,10 @@ class WebhooksController < ApplicationController
 
   def payload
     Oj.load(parse_data['payload']).deep_symbolize_keys
+  end
+
+  def event_type
+    request.headers['X-Github-Event']
   end
 
   def parse_data

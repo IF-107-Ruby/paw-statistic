@@ -1,4 +1,4 @@
-class CardMovedHandler < BasicEventHandler
+class ProjectCardMovedHandler < BasicEventHandler
   delegate :project_card, to: :event
   delegate :id, :column_id, :updated_on_github_at, to: :project_card
 

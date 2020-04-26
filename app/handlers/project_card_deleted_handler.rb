@@ -1,4 +1,4 @@
-class CardDeletedHandler < BasicEventHandler
+class ProjectCardDeletedHandler < BasicEventHandler
   delegate :project_card, to: :event
 
   def execute!
