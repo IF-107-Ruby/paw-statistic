@@ -5,18 +5,14 @@ class HandleEventJob < ApplicationJob
     event = EventStruct.new event_type, data
     handler = get_handler(event)
     handler.execute!
+  rescue NameError => e
+    logger.error(e)
   end
 
   private
 
-  NullHandler = Class.new do
-    def self.execute!; end
-  end
-
   def get_handler(event)
     handler_class(event.type, event.action).new(event)
-  rescue NameError
-    NullHandler
   end
 
   def handler_class(type, action)
