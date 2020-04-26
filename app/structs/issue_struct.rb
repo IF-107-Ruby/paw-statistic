@@ -22,20 +22,18 @@ class IssueStruct < BaseModelStruct
   end
 
   def user
-    user = @params[:user]
-    @_user ||= if user.is_a?(Hash)
-                 UserStruct.new(user)
+    @_user ||= if @params[:user].is_a?(Hash)
+                 UserStruct.new(@params[:user])
                else
-                 user
+                 @params[:user]
                end
   end
 
   def assignee
-    assignee = @params[:assignee]
-    @_assignee ||= if assignee.is_a?(Hash)
-                     UserStruct.new(assignee)
+    @_assignee ||= if @params[:assignee].is_a?(Hash)
+                     UserStruct.new(@params[:assignee])
                    else
-                     assignee
+                     @params[:assignee]
                    end
   end
 
