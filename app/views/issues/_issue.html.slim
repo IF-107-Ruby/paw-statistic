@@ -2,6 +2,6 @@
   = link_to issue.html_url
     h4 = issue.title
   = decorated_state(issue)
-  - unless issue.card.moves.empty?
+  - unless issue.card.nil? || issue.card.moves.empty?
     hr
-  = render CardMoveDecorator.decorate_collection(issue.card.moves)
+    = render CardMoveDecorator.decorate_collection(issue.card.moves)
