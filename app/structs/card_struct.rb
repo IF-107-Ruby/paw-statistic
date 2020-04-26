@@ -17,7 +17,8 @@ class CardStruct < BaseModelStruct
   end
 
   def to_params
-    super.slice(:id, :note, :archived, :updated_on_github_at).tap do |result|
+    super.slice(:id, :note, :archived, :content_url,
+                :updated_on_github_at).tap do |result|
       result[:column] = @params[:column] if @params[:column].is_a?(ApplicationRecord)
       result[:user] = @params[:user] if @params[:user].is_a?(ApplicationRecord)
       result[:issue] = @params[:issue] if @params[:issue].is_a?(ApplicationRecord)
