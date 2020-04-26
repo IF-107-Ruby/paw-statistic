@@ -5,17 +5,21 @@ class HandleEventJob < ApplicationJob
     event = EventStruct.new event_type, data
     handler = get_handler(event)
     handler.execute!
-  rescue NameError => e
-    logger.error(e)
   end
 
   private
+
+  NullHandler = Class.new do
+    def initialize(_); end
+
+    def execute!; end
+  end
 
   def get_handler(event)
     handler_class(event.type, event.action).new(event)
   end
 
   def handler_class(type, action)
-    "#{type.classify}#{action.classify}Handler".constantize
+    Rails.configuration.x.event_handlers.dig(type, action) || NullHandler
   end
 end
