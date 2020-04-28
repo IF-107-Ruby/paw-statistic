@@ -7,4 +7,17 @@ class UserStruct < BaseModelStruct
     @avatar_url = params[:avatar_url]
     @updated_on_github_at = params[:updated_at]
   end
+
+  def to_params
+    main_params
+  end
+
+  alias to_hash to_params
+
+  private
+
+  def main_params
+    { id: id, login: login, avatar_url: avatar_url,
+      updated_on_github_at: updated_on_github_at }
+  end
 end

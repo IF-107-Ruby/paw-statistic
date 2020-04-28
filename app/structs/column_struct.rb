@@ -14,10 +14,17 @@ class ColumnStruct < BaseModelStruct
   end
 
   def to_params
-    super.slice(:id, :name, :updated_on_github_at).tap do |result|
+    main_params.tap do |result|
       result[:project] = project if project.is_a?(ApplicationRecord)
     end
   end
 
   alias to_hash to_params
+
+  private
+
+  def main_params
+    { id: id, name: name,
+      updated_on_github_at: updated_on_github_at }
+  end
 end

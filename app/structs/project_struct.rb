@@ -21,11 +21,18 @@ class ProjectStruct < BaseModelStruct
   end
 
   def to_params
-    super.slice(:id, :name, :state, :number, :body,
-                :html_url, :updated_on_github_at).tap do |result|
+    main_params.tap do |result|
       result[:user] = user if user.is_a?(ApplicationRecord)
     end
   end
 
   alias to_hash to_params
+
+  private
+
+  def main_params
+    { id: id, name: name, state: state, body: body,
+      number: number, html_url: html_url,
+      updated_on_github_at: updated_on_github_at }
+  end
 end
