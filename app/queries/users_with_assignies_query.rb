@@ -1,5 +1,5 @@
 class UsersWithAssigniesQuery
-  def call
+  def self.call
     User
       .includes(assignies: { card: { moves: %i[to next_move] } })
       .joins(:assignies)

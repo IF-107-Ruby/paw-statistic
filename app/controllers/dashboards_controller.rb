@@ -1,5 +1,5 @@
 class DashboardsController < ApplicationController
   def show
-    @users = UsersWithAssigniesQuery.new.call
+    @users = UsersWithAssigniesQuery.call
   end
 end

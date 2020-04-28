@@ -1,4 +1,22 @@
 class HandleEventJob < ApplicationJob
+  HANDLERS = ActiveSupport::HashWithIndifferentAccess.new(
+    project_card: {
+      created: ProjectCardCreatedHandler,
+      edited: ProjectCardEditedHandler,
+      converted: ProjectCardConvertedHandler,
+      moved: ProjectCardMovedHandler,
+      deleted: ProjectCardDeletedHandler
+    },
+    issues: {
+      opened: IssueOpenedHandler,
+      edited: IssueEditedHandler,
+      assigned: IssueAssignedHandler,
+      unassigned: IssueUnassignedHandler,
+      closed: IssueClosedHandler,
+      deleted: IssueDeletedHandler
+    }
+  ).freeze
+
   queue_as :default
 
   def perform(event_type, data)
@@ -20,6 +38,6 @@ class HandleEventJob < ApplicationJob
   end
 
   def handler_class(type, action)
-    Rails.configuration.x.event_handlers.dig(type, action) || NullHandler
+    HANDLERS.dig(type, action) || NullHandler
   end
 end
