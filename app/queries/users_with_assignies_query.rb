@@ -1,8 +1,8 @@
 class UsersWithAssigniesQuery
   def self.call
     User
-      .includes(assignies: { card: { moves: %i[to next_move] } })
-      .joins(:assignies)
+      .includes(assignments: { card: { moves: %i[to next_move] } })
+      .joins(:assignments)
       .group(:id).order('count(users.id) desc')
   end
 end
