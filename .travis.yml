@@ -28,4 +28,4 @@ deploy:
     - rake cleanup
   on:
     repo: IF-107-Ruby/paw-statistics
-    branch: refactoring
+    branch: master
