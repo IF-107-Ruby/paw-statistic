@@ -18,16 +18,14 @@ require 'sprockets/railtie'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
-Dotenv::Railtie.load
-
 module PawStatistics
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
 
     config.eager_load_paths << Rails.root.join('lib')
-    config.autoload_paths << Rails.root.join('/app/concerns')
+    config.autoload_paths << Rails.root.join('/app/structs')
+    config.autoload_paths << Rails.root.join('/app/handlers')
 
     config.after_initialize do
       unless Rails.env.test? || ActiveRecord::Base

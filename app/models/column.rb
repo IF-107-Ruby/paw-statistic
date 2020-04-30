@@ -1,4 +1,6 @@
 class Column < ApplicationRecord
+  include GithubMethods
+
   belongs_to :project
   has_many :cards, dependent: :destroy
   has_many :from_moves,

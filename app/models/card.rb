@@ -1,14 +1,31 @@
 class Card < ApplicationRecord
+  include GithubMethods
+
   belongs_to :column
   belongs_to :user
   belongs_to :issue, optional: true
   has_many :moves, class_name: 'CardMove', dependent: :destroy
-  belongs_to :last_move, class_name: 'CardMove', optional: true
 
-  def move(from:, to:, moved_by:, moved_at:)
-    move = CardMove.create(from: from, to: to, user: moved_by,
-                           moved_at: moved_at, card: self)
-    self.last_move = move
-    update(column: to)
+  def move(to:, moved_by:, moved_at:)
+    previos_move = moves.last
+    moves.create(from: column, to: to, user: moved_by,
+                 moved_at: moved_at, previos_move: previos_move)
+    update(column: to, updated_on_github_at: moved_at)
+  end
+
+  def self.sync(json)
+    struct = CardStruct.new(json)
+    return if up_to_date?(struct)
+
+    from_struct(struct)
+  end
+
+  def self.from_struct(struct)
+    column = Column.find(struct.column_id)
+    user = User.update_or_create(struct.creator)
+    issue = Issue.from_struct(struct.issue) if struct.issue
+    update_or_create(
+      struct.with_params(column: column, user: user, issue: issue)
+    )
   end
 end

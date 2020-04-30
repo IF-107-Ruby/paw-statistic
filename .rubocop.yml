@@ -24,3 +24,19 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/*"
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - "app/jobs/*"
+
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*"
+
+Naming/MemoizedInstanceVariableName:
+  Exclude:
+    - "app/structs/*"

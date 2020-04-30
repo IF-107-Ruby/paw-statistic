@@ -16,3 +16,16 @@ before_script:
 script:
   - bundle exec rspec
   - bundle exec rubocop --require rubocop-rails
+deploy:
+  provider: heroku
+  api_key:
+    secure: elyZ1DkAZ/emMtL8wCsORraz4BgURPte+qEhCteY0sC2kQjP5yqDgRqqVtH9cMZg+S3Z7UrGx+UYkaIbhaWPNwnteeGwJpctYNi9sJs/gDzsLwagtoWB8/TB2xmvlsDLwMo2QF7oMvU7wsaht5cdAJzGI75OdIkWQbbHRIFIQLOjtQbSHQUSSdX1p9FjOhb7zPl35KlaWOf2cbUqrB7N4DF8zz86GV5YaMv328m92LvgbRVRAPSLOxSYgr44dNRRVz0YA4I/JwO2CN7UadIHpYl82E0hraZf5aesltmD8DdvbFCyC5DSmeTo+rDIUYFpvAykeKkj5queBLltzczDqUmch4fVJV7Lxl75xDjYQx3QII1PyI9pTWtf/YFnpwREtOcspuAYU/tTYLEUg1X7XoRvizggO3EG5eD+TEeYu5FStYtJbsPhX6XZSt0Ju01LPJMm6/tHJ2P123be3gM1pAYbQSiuVO8mwyf9o8bfHlfRsG+SBPTcKZT6wf1AG3DstqDY6N7oJU3W2jFB7Y/P14aJXxX4o6eXelMfpRVesVPzyCY+y6U/jiwZi7wv3I9T3/oBA4RBkvh/r5WqraUDionhBm5MDIC++Zr7/olhbn2Qwvarie9tYoYFWCiW01MqWYPy27k/J8xeSayM1hot7pIE41vyBnmnOw3G2boAWFQ=
+  app: paw-statistics
+  before_deploy:
+    - cp config/database.yml.heroku config/database.yml
+  run:
+    - rake db:migrate
+    - rake cleanup
+  on:
+    repo: IF-107-Ruby/paw-statistics
+    branch: refactoring
