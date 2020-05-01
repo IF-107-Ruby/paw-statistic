@@ -1,0 +1,14 @@
+nav.navbar.navbar-expand-lg
+  .container
+    ul.navbar-nav.ml-auto
+      - if current_user
+        li.sign-btn
+          = link_to destroy_user_session_path, method: :delete, class: 'btn btn-dark'
+            | Sign out
+      - else
+        li.nav_item.sign-btn
+          = link_to new_user_session_path, class: 'btn btn-dark nav-sign-in-btn'
+            | Sign in
+        li.nav_item.sign-btn
+          = link_to new_users_path, class: 'btn btn-dark nav-sign-in-btn'
+            | Sign up
