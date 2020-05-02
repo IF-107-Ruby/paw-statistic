@@ -28,3 +28,41 @@
 -webkit-scrollbar {
   display: none;
 }
+
+.alert-notice {
+  @extend .alert-success;
+}
+
+.alert-alert {
+  @extend .alert-danger;
+}
+
+.simple_form {
+  abbr[title] {
+    display: none;
+    text-decoration: none;
+  }
+  label.required::after {
+    content: '*'
+  }
+  ::placeholder {
+    opacity: 0.6;
+    font-size: 14px;
+  }
+}
+
+.sign-up-btn {
+  margin-left: 10px;
+}
+
+#error_explanation {
+  ul {
+    margin-bottom: 0;
+  }
+}
+
+.user_remember_me {
+  label {
+    padding-left: 10px;
+  }
+}

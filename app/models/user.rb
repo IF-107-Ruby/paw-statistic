@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  include GithubMethods
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.freeze
+  include GithubMethods
 
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable, :omniauthable
@@ -13,14 +13,25 @@ class User < ApplicationRecord
                          class_name: 'Issue', foreign_key: 'assignee_id'
 
   validates :login, presence: true, length: { in: 2..50 }
-  validates :email, length: { in: 8..255 }, format: { with: VALID_EMAIL_REGEX }
+  validates :email, length: { in: 8..255 }, format: { with: VALID_EMAIL_REGEX }, if: ->(u) { u.email.present? }
 
   def self.from_omniauth(auth)  
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-    end
+    where(provider: auth.provider, uid: auth.uid).first_or_create(
+      login: auth.info.nickname,
+      provider: auth.provider,
+      uid: auth.uid,
+      email: auth.info.email,
+      password: Devise.friendly_token[0,20]
+    )
+  end
+
+  protected 
+  
+  def password_required? 
+    false 
+  end 
+
+  def email_required?
+    false
   end
 end

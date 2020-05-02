@@ -24,8 +24,8 @@ class Issue < ApplicationRecord
 
   def self.from_struct(struct)
     user = User.update_or_create(struct.user)
+    
     assignee = User.update_or_create(struct.assignee) if struct.assignee
-
     update_or_create(
       struct.with_params(user: user, assignee: assignee)
     )

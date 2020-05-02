@@ -7,7 +7,6 @@ class ProjectsLoader
   end
 
   def run
-    # return nil
     issues_json = GithubApi.get(endpoint: issues_url)
     issues_json.each { |issue_json| Issue.sync(issue_json) }
 
