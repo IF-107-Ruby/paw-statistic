@@ -32,7 +32,7 @@ Devise.setup do |config|
   # available as additional gems.
   require 'devise/orm/active_record'
 
-  config.omniauth :github, ENV['CLIENT_ID'], ENV['APP_SECRET'], :scope => 'user:email'
+  config.omniauth :github, ENV['CLIENT_ID'], ENV['APP_SECRET'], scope: 'user:email'
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is

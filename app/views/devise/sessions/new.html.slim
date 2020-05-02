@@ -11,5 +11,6 @@
           = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
         .form-actions
           = f.button :submit, "Log in", class: 'btn btn-primary'
+        .sign-in-with-github
         = link_to "Sign in with Github", user_github_omniauth_authorize_path
 
