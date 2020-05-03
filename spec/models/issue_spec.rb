@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Issue, type: :model do
   describe 'associations' do
-    it { should belong_to(:user) }
+    it { should belong_to(:team_member) }
     it { should have_one(:card) }
-    it { should belong_to(:assignee).class_name('User').optional(true) }
+    it { should belong_to(:assignee).class_name('TeamMember').optional(true) }
   end
 
   describe '#remove_assignee' do

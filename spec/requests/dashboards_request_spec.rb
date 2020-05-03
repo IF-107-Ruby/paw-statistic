@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Dashboards', type: :request do
   describe 'GET#show' do
-    let!(:user) { create(:user) }
+    let!(:user) { create(:team_member) }
     it 'returns http success' do
       login_as(user)
       get root_path

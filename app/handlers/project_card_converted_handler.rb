@@ -3,7 +3,7 @@ class ProjectCardConvertedHandler < BasicEventHandler
   delegate :id, to: :project_card
 
   def execute!
-    issue = Issue.update_or_create(project_card.issue.with_params(user: sender))
+    issue = Issue.update_or_create(project_card.issue.with_params(team_member: sender))
     card.update(issue: issue)
   end
 
