@@ -18,13 +18,25 @@ class User < ApplicationRecord
                     if: ->(u) { u.email.present? }
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create(
-      login: auth.info.nickname,
-      provider: auth.provider,
-      uid: auth.uid,
-      email: auth.info.email,
-      password: Devise.friendly_token[0, 20]
-    )
+    user = User.find_by(login: auth.info.nickname)
+    if user
+      user.update(update_data(auth))
+      user
+    else
+      where(provider: auth.provider, uid: auth.uid).first_or_create(
+        update_data(auth)
+      )
+    end
+  end
+
+  def self.update_data(params)
+    attrs = { login: params.info.nickname,
+              provider: params.provider,
+              uid: params.uid,
+              email: params.info.email,
+              avatar_url: params.info.image,
+              password: Devise.friendly_token[0, 20] }
+    attrs
   end
 
   protected
