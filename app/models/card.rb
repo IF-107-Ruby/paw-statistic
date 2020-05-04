@@ -25,7 +25,7 @@ class Card < ApplicationRecord
     user = TeamMember.update_or_create(struct.creator)
     issue = Issue.from_struct(struct.issue) if struct.issue
     update_or_create(
-      struct.with_params(column: column, user: user, issue: issue)
+      struct.with_params(column: column, team_member: user, issue: issue)
     )
   end
 end

@@ -27,7 +27,7 @@ class Issue < ApplicationRecord
 
     assignee = TeamMember.update_or_create(struct.assignee) if struct.assignee
     update_or_create(
-      struct.with_params(user: user, assignee: assignee)
+      struct.with_params(team_member: user, assignee: assignee)
     )
   end
 end

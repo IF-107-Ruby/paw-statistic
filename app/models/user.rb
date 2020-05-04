@@ -1,12 +1,12 @@
 class User < ApplicationRecord
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.freeze
-
   devise :database_authenticatable, :recoverable,
          :rememberable, :validatable, :omniauthable
 
-  validates :first_name, :email, presence: true
-  validates :first_name, :last_name, length: { in: 3..50 }
-  validates :email, format: { with: VALID_EMAIL_REGEX }
+  validates :first_name, presence: true
+  validates :first_name, length: { in: 3..50 },
+                         if: ->(c) { c.first_name.present? }
+  validates :last_name, length: { in: 3..50 },
+                        if: ->(c) { c.last_name.present? }
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create(
