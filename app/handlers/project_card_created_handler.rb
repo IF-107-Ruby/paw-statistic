@@ -3,7 +3,7 @@ class ProjectCardCreatedHandler < BasicEventHandler
   delegate :column_id, to: :project_card
 
   def execute!
-    Card.create(project_card.with_params(user: sender, column: column))
+    Card.create(project_card.with_params(team_member: sender, column: column))
   end
 
   def column

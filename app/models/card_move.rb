@@ -3,7 +3,7 @@ class CardMove < ApplicationRecord
 
   belongs_to :from, class_name: 'Column'
   belongs_to :to, class_name: 'Column'
-  belongs_to :user
+  belongs_to :team_member
   belongs_to :card
   belongs_to :next_move, class_name: 'CardMove', optional: true
 

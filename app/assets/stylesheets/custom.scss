@@ -28,3 +28,49 @@
 -webkit-scrollbar {
   display: none;
 }
+
+.alert-notice {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-alert {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.simple_form {
+  abbr[title] {
+    display: none;
+    text-decoration: none;
+  }
+  label.required::after {
+    content: '*'
+  }
+  ::placeholder {
+    opacity: 0.6;
+    font-size: 14px;
+  }
+}
+
+.sign-up-btn {
+  margin-left: 10px;
+}
+
+#error_explanation {
+  ul {
+    margin-bottom: 0;
+  }
+}
+
+.user_remember_me {
+  label {
+    padding-left: 10px;
+  }
+}
+
+.sign-in-with-github {
+  padding-top: 15px;
+}

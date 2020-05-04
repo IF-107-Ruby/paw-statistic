@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :card do
     column { create(:column) }
     note { Faker::Lorem.sentence }
-    user { create(:user) }
+    team_member { create(:team_member) }
   end
 end

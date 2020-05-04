@@ -1,5 +1,6 @@
 class DashboardsController < ApplicationController
+  before_action :authenticate_user!
   def show
-    @users = UsersWithAssigniesQuery.call
+    @team_members = UsersWithAssigniesQuery.call
   end
 end

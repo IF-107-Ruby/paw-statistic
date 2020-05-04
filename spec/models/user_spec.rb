@@ -1,9 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { should have_many(:projects) }
-  it { should have_many(:cards) }
-  it { should have_many(:issues) }
-  it { should have_many(:card_moves) }
-  it { should have_many(:assignments).class_name('Issue') }
+  describe 'validations' do
+    it { should validate_presence_of(:first_name) }
+    it { should validate_presence_of(:email) }
+  end
 end

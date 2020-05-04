@@ -4,6 +4,6 @@ class IssueAssignedHandler < BasicEventHandler
 
   def execute!
     issue = Issue.find(id)
-    issue.update(assignee: User.update_or_create(assignee))
+    issue.update(assignee: TeamMember.update_or_create(assignee))
   end
 end

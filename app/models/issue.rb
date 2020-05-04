@@ -7,9 +7,9 @@ class Issue < ApplicationRecord
                                   END")
                          }
 
-  belongs_to :user
+  belongs_to :team_member
   has_one :card, dependent: :destroy
-  belongs_to :assignee, class_name: 'User', optional: true
+  belongs_to :assignee, class_name: 'TeamMember', optional: true
 
   def remove_assignee
     update(assignee: nil)
@@ -23,11 +23,11 @@ class Issue < ApplicationRecord
   end
 
   def self.from_struct(struct)
-    user = User.update_or_create(struct.user)
-    assignee = User.update_or_create(struct.assignee) if struct.assignee
+    user = TeamMember.update_or_create(struct.user)
 
+    assignee = TeamMember.update_or_create(struct.assignee) if struct.assignee
     update_or_create(
-      struct.with_params(user: user, assignee: assignee)
+      struct.with_params(team_member: user, assignee: assignee)
     )
   end
 end

@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :issue do
     card { create(:card) }
     title { Faker::Lorem.sentence }
-    user { create(:user) }
+    team_member { create(:team_member) }
     state { Faker::Lorem.word }
     html_url { Faker::Internet.url }
     locked { false }
@@ -11,7 +11,7 @@ FactoryBot.define do
 
   trait :with_assignee do
     after(:build) do |issue|
-      issue.assignee = create(:user)
+      issue.assignee = create(:team_member)
     end
   end
 end

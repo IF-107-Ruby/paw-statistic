@@ -8,6 +8,6 @@ class BasicEventHandler
   def execute!; end
 
   def sender
-    User.update_or_create(event.sender)
+    TeamMember.update_or_create(event.sender)
   end
 end
